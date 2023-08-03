@@ -6,6 +6,7 @@ export default class Slide {
         this.wrapper = document.querySelector(wrapper);
         this.dist = { finalPosition: 0, startX: 0, movement: 0 };
         this.activeClass = 'active';
+        this.changeEvent = new Event('changeEvent');
     }
 
     transition(active) {
@@ -96,6 +97,7 @@ export default class Slide {
         this.slidesIndexNav(index);
         this.dist.finalPosition = activeSlide.position;
         this.changeActiveClass();
+        this.wrapper.dispatchEvent(this.changeEvent);
     }
 
     changeActiveClass() {
@@ -132,6 +134,8 @@ export default class Slide {
         this.onStart = this.onStart.bind(this);
         this.onMove = this.onMove.bind(this);
         this.onEnd = this.onEnd.bind(this);
+        this.activePrevSlide = this.activePrevSlide.bind(this);
+        this.activeNextSlide = this.activeNextSlide.bind(this);
         this.onResize = debounce(this.onResize.bind(this), 200);
     }
 
@@ -142,6 +146,7 @@ export default class Slide {
             this.addSlideEvents();
             this.slideConfig();
             this.addResizeEvent();
+            this.changeSlide(0);
         }
         return this;
     }
